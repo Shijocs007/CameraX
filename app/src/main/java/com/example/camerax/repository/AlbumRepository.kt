@@ -9,6 +9,6 @@ interface AlbumRepository {
 
     suspend fun insertPhotos(photos : List<Photo>)
     suspend fun insertAlbum(album : Album)
-    suspend fun getAlbums() : Flow<List<Album>>
-    suspend fun getPhotos(albumName : String) : Flow<AlbumWithPhotos>
+    suspend fun getAlbumsWithPhotos() : Flow<List<AlbumWithPhotos>>
+    suspend fun getPhotos(albumName : String) : Flow<List<Photo>>
 }

@@ -15,12 +15,12 @@ class AlbumRepositoryIml(private val dao : CameraDao) : AlbumRepository {
         dao.insertAlbum(album)
     }
 
-    override suspend fun getAlbums(): Flow<List<Album>> {
-       return dao.getAlbums()
+    override suspend fun getAlbumsWithPhotos(): Flow<List<AlbumWithPhotos>> {
+       return dao.getAlbumWithPhotos()
     }
 
-    override suspend fun getPhotos(albumName: String): Flow<AlbumWithPhotos> {
-        return dao.getAlbumWithPhotos(albumName)
+    override suspend fun getPhotos(albumName: String): Flow<List<Photo>> {
+        return dao.getPhotos(albumName)
     }
 
 }

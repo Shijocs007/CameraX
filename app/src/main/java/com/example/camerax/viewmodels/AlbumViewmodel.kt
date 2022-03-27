@@ -31,7 +31,7 @@ class AlbumViewmodel @Inject constructor(
     private val photos = mutableListOf<Photo>()
 
 
-    suspend fun getAllAlbums() = getAlbumsUsecase
+    suspend fun getAllAlbums() = getAlbumsUsecase()
 
     suspend fun getPhotsos(albumName : String) = getPhotosUsecase(albumName)
 
