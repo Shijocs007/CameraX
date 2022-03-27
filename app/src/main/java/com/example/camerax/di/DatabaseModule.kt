@@ -21,7 +21,6 @@ class DatabaseModule {
      * @param context  ApplicationContext
      * @return  the database instance of the application, CameraDatabase
      **/
-    @Singleton
     @Provides
     fun provideDb(@ApplicationContext context: Context) : CameraDatabase {
         return  Room
@@ -39,7 +38,6 @@ class DatabaseModule {
      * @param database room database instance
      * @return the instance of CameraDao
      * */
-    @Singleton
     @Provides
     fun provideDAO(database: CameraDatabase): CameraDao {
         return database.cameraDao()

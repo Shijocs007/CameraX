@@ -8,8 +8,10 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
+import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
@@ -17,22 +19,28 @@ import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.camerax.adapter.PhotosPreviewAdapter
 import com.example.camerax.databinding.ActivityMainBinding
 import com.example.camerax.viewmodels.AlbumViewmodel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
+class TakePhotoActivity : AppCompatActivity() {
 
     private val viewModel: AlbumViewmodel by viewModels()
 
     private var imageCapture: ImageCapture? = null
     private lateinit var mBinding: ActivityMainBinding
     private lateinit var cameraExecutor: ExecutorService
+    private  var mAdapter =  PhotosPreviewAdapter(mutableListOf())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,6 +58,44 @@ class MainActivity : AppCompatActivity() {
         }
         mBinding.imageCaptureButton.setOnClickListener {
             takePhoto()
+        }
+
+        mBinding.save.setOnClickListener {
+            showAlbumNameDialog()
+        }
+
+        mBinding.recyclerView.apply {
+            layoutManager = LinearLayoutManager(this@TakePhotoActivity, LinearLayoutManager.HORIZONTAL, false)
+            adapter = mAdapter
+        }
+
+        initObservers()
+    }
+
+    private fun initObservers() {
+        lifecycleScope.launch {
+            viewModel.photosStateFlow.collect {
+                mAdapter.submitList(it)
+            }
+        }
+    }
+
+    private fun showAlbumNameDialog() {
+        val builder = AlertDialog.Builder(this)
+        val dialogLayout = layoutInflater.inflate(R.layout.album_dialog_layout, null)
+        val editText = dialogLayout.findViewById<EditText>(R.id.album_name)
+
+        with(builder) {
+            setTitle("Enter Album Name")
+            setPositiveButton("SAVE"){dialog, which ->
+                val albumName = editText.text.toString()
+                viewModel.saveAlbums(albumName)
+            }
+            setNegativeButton("CANCEL"){dialog, which ->
+                dialog.dismiss()
+            }
+            setView(dialogLayout)
+            show()
         }
     }
 
@@ -88,6 +134,7 @@ class MainActivity : AppCompatActivity() {
 
                 override fun
                         onImageSaved(output: ImageCapture.OutputFileResults){
+                        viewModel.addPhotos(name, output.savedUri.toString())
                     val msg = "Photo capture succeeded: ${output.savedUri}"
                     Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
                     Log.d(TAG, msg)

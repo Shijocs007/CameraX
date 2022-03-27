@@ -17,7 +17,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CameraX">
         <activity
-            android:name=".MainActivity"
+            android:name=".TakePhotoActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

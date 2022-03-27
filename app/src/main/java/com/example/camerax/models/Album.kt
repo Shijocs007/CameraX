@@ -7,5 +7,5 @@ import androidx.room.PrimaryKey
 data class Album(
     @PrimaryKey(autoGenerate = false)
     val albumName : String,
-    var thumbNail : String = ""
+    var thumbNail : String? = null
     )

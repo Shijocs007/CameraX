@@ -8,5 +8,5 @@ data class Photo(
     @PrimaryKey(autoGenerate = false)
     val fileName : String,
     val filePath : String,
-    var albumName : String?= ""
+    var albumName : String? = null
 )

@@ -17,8 +17,8 @@ interface CameraDao {
 
     @Transaction
     @Query("SELECT * FROM photo WHERE albumName = :albumName")
-    suspend fun getAlbumWithPhotos(albumName: String): Flow<AlbumWithPhotos>
+    fun getAlbumWithPhotos(albumName: String): Flow<AlbumWithPhotos>
 
     @Query("SELECT * FROM album")
-    suspend fun getAlbums() : Flow<List<Album>>
+    fun getAlbums() : Flow<List<Album>>
 }

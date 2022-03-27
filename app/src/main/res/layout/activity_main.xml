@@ -10,7 +10,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".MainActivity">
+        tools:context=".TakePhotoActivity">
 
         <androidx.camera.view.PreviewView
             android:id="@+id/viewFinder"
@@ -29,7 +29,7 @@
             app:layout_constraintLeft_toLeftOf="parent" />
 
         <Button
-            android:id="@+id/video_capture_button"
+            android:id="@+id/save"
             android:layout_width="75dp"
             android:layout_height="75dp"
             android:layout_marginStart="50dp"
@@ -48,7 +48,8 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
