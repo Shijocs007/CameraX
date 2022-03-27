@@ -13,21 +13,24 @@ import com.example.camerax.adapter.AlbumAdapter
 import com.example.camerax.adapter.PhotosPreviewAdapter
 import com.example.camerax.databinding.ActivityAlbumBinding
 import com.example.camerax.databinding.ActivityMainBinding
+import com.example.camerax.listeners.IAdapterClickListener
+import com.example.camerax.models.Photo
 import com.example.camerax.viewmodels.AlbumViewmodel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class AlbumActivity : AppCompatActivity() {
+class AlbumActivity : AppCompatActivity(), IAdapterClickListener {
     private lateinit var mBinding: ActivityAlbumBinding
     private val viewModel: AlbumViewmodel by viewModels()
 
-    private  var mAdapter =  AlbumAdapter(mutableListOf())
+    private lateinit  var mAdapter : AlbumAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mBinding = ActivityAlbumBinding.inflate(layoutInflater)
         setContentView(mBinding.root)
+        mAdapter = AlbumAdapter(mutableListOf(), this)
 
 
         mBinding.cameraFab.setOnClickListener {
@@ -52,5 +55,15 @@ class AlbumActivity : AppCompatActivity() {
                 mAdapter.sumbitList(it)
             }
         }
+    }
+
+    override fun onPhotoClcicked(photo: Photo) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onAlbumClicked(albumName: String) {
+        startActivity(Intent(this@AlbumActivity, PhotosActivity::class.java).apply {
+            putExtra("album", albumName)
+        })
     }
 }

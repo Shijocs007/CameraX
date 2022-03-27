@@ -19,18 +19,20 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CameraX">
         <activity
+            android:name=".activities.PhotosActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.AlbumActivity"
-            android:exported="true" >
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".TakePhotoActivity"
-            android:exported="false">
-        </activity>
+            android:exported="false"></activity>
     </application>
 
 </manifest>
