@@ -4,6 +4,7 @@ import com.example.camerax.models.Photo
 
 interface IAdapterClickListener {
 
-    fun onPhotoClcicked(photo: Photo)
-    fun onAlbumClicked(albumName : String)
+    fun onPhotoClcicked(filePath: String) {}
+    fun onAlbumClicked(albumName : String) {}
+    fun onRemovePhoto(photo: Photo) {}
 }

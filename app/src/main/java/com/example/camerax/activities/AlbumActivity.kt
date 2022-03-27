@@ -57,10 +57,6 @@ class AlbumActivity : AppCompatActivity(), IAdapterClickListener {
         }
     }
 
-    override fun onPhotoClcicked(photo: Photo) {
-        TODO("Not yet implemented")
-    }
-
     override fun onAlbumClicked(albumName: String) {
         startActivity(Intent(this@AlbumActivity, PhotosActivity::class.java).apply {
             putExtra("album", albumName)

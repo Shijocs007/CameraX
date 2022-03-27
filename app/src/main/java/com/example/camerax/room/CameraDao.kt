@@ -16,7 +16,7 @@ interface CameraDao {
     suspend fun insertAlbum(album: Album)
 
     @Transaction
-    @Query("SELECT * FROM photo")
+    @Query("SELECT * FROM album ORDER BY time DESC")
     fun getAlbumWithPhotos(): Flow<List<AlbumWithPhotos>>
 
     @Query("SELECT * FROM album")

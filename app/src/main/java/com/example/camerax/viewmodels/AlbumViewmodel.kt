@@ -2,6 +2,7 @@ package com.example.camerax.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.camerax.Utils
 import com.example.camerax.models.Album
 import com.example.camerax.models.Photo
 import com.example.camerax.use_cases.AddAlbum
@@ -54,11 +55,19 @@ class AlbumViewmodel @Inject constructor(
                 }
                 else -> {
                     photos.map { it.albumName = albumName }
-                    addAlbumUsecase(Album(albumName, photos[0].filePath))
+                    addAlbumUsecase(Album(albumName, photos[0].filePath, Utils.getTimeString()))
                     addPhotosUsecase(photos)
                     photos.clear()
+                    _photosStateFlow.emit(photos)
                 }
             }
+        }
+    }
+
+    fun removePhoto(photo: Photo) {
+        viewModelScope.launch {
+            photos.remove(photo)
+            _photosStateFlow.emit(photos)
         }
     }
 }

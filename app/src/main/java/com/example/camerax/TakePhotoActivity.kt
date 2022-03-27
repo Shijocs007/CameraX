@@ -2,6 +2,7 @@ package com.example.camerax
 
 import android.Manifest
 import android.content.ContentValues
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
@@ -21,8 +22,11 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.camerax.activities.PhotoPreviewActivity
 import com.example.camerax.adapter.PhotosPreviewAdapter
 import com.example.camerax.databinding.ActivityMainBinding
+import com.example.camerax.listeners.IAdapterClickListener
+import com.example.camerax.models.Photo
 import com.example.camerax.viewmodels.AlbumViewmodel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
@@ -33,14 +37,14 @@ import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
 @AndroidEntryPoint
-class TakePhotoActivity : AppCompatActivity() {
+class TakePhotoActivity : AppCompatActivity(), IAdapterClickListener {
 
     private val viewModel: AlbumViewmodel by viewModels()
 
     private var imageCapture: ImageCapture? = null
     private lateinit var mBinding: ActivityMainBinding
     private lateinit var cameraExecutor: ExecutorService
-    private  var mAdapter =  PhotosPreviewAdapter(mutableListOf())
+    private  var mAdapter =  PhotosPreviewAdapter(mutableListOf(), this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -78,6 +82,21 @@ class TakePhotoActivity : AppCompatActivity() {
                 mAdapter.submitList(it)
             }
         }
+        lifecycleScope.launch {
+            viewModel.uiToast.collect {
+                Toast.makeText(this@TakePhotoActivity, it, Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    override fun onPhotoClcicked(filePath: String) {
+        startActivity(Intent(this@TakePhotoActivity, PhotoPreviewActivity::class.java).apply {
+            putExtra("file", filePath)
+        })
+    }
+
+    override fun onRemovePhoto(photo: Photo) {
+        viewModel.removePhoto(photo)
     }
 
     private fun showAlbumNameDialog() {
@@ -104,8 +123,7 @@ class TakePhotoActivity : AppCompatActivity() {
         val imageCapture = imageCapture ?: return
 
         // Create time stamped name and MediaStore entry.
-        val name = SimpleDateFormat(FILENAME_FORMAT, Locale.US)
-            .format(System.currentTimeMillis())
+        val name = Utils.getTimeString()
         val contentValues = ContentValues().apply {
             put(MediaStore.MediaColumns.DISPLAY_NAME, name)
             put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg")
@@ -135,9 +153,6 @@ class TakePhotoActivity : AppCompatActivity() {
                 override fun
                         onImageSaved(output: ImageCapture.OutputFileResults){
                         viewModel.addPhotos(name, output.savedUri.toString())
-                    val msg = "Photo capture succeeded: ${output.savedUri}"
-                    Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
-                    Log.d(TAG, msg)
                 }
             }
         )
@@ -208,7 +223,6 @@ class TakePhotoActivity : AppCompatActivity() {
 
     companion object {
         private const val TAG = "CameraXApp"
-        private const val FILENAME_FORMAT = "yyyy-MM-dd-HH-mm-ss-SSS"
         private const val REQUEST_CODE_PERMISSIONS = 10
         private val REQUIRED_PERMISSIONS =
             mutableListOf (

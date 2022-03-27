@@ -3,8 +3,11 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="../../Library/Android/sdk/platforms/android-32/data/res/drawable/progress_horizontal.xml" value="0.138" />
+        <entry key="app/src/main/res/drawable/ic_baseline_close_24.xml" value="0.138" />
         <entry key="app/src/main/res/layout/activity_album.xml" value="0.2078125" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.14402173913043478" />
+        <entry key="app/src/main/res/layout/activity_photo_preview.xml" value="0.2078125" />
         <entry key="app/src/main/res/layout/activity_photos.xml" value="0.19375" />
         <entry key="app/src/main/res/layout/album_dialog_layout.xml" value="0.8898026315789473" />
         <entry key="app/src/main/res/layout/list_item_album.xml" value="0.2078125" />
