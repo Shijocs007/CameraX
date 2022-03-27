@@ -4,17 +4,21 @@ import androidx.room.*
 import com.example.camerax.models.Album
 import com.example.camerax.models.Photo
 import com.example.camerax.room.relations.AlbumWithPhotos
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface CameraDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertPhoto(school: Photo)
+    suspend fun insertPhotos(photos: List<Photo>)
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertAlbum(school: Album)
+    suspend fun insertAlbum(album: Album)
 
     @Transaction
     @Query("SELECT * FROM photo WHERE albumName = :albumName")
-    suspend fun getAlbumWithPhotos(albumName: String): List<AlbumWithPhotos>
+    suspend fun getAlbumWithPhotos(albumName: String): Flow<AlbumWithPhotos>
+
+    @Query("SELECT * FROM album")
+    suspend fun getAlbums() : Flow<List<Album>>
 }

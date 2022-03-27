@@ -11,9 +11,9 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
-@InstallIn(SingletonComponent::class)
 @Module
-object DatabaseModule {
+@InstallIn(SingletonComponent::class)
+class DatabaseModule {
 
     /**
      *this method provide CameraDatabase instance in application scope
