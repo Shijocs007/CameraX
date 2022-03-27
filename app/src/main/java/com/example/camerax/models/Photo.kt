@@ -4,8 +4,9 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity
-data class Album(
+data class Photo(
     @PrimaryKey(autoGenerate = false)
-    val albumName : String,
-    var thumbNail : String = ""
-    )
+    val fileName : String,
+    val filePath : String,
+    var albumName : String?= ""
+)
